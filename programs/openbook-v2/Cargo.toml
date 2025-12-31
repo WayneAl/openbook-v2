@@ -20,7 +20,7 @@ test-bpf = ["client"]
 client = ["solana-sdk", "no-entrypoint"]
 # Enables GPL-licensed parts of the code. See LICENSE file.
 enable-gpl = []
-
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
 
 [dependencies]
 anchor-lang = { workspace = true, features = ["event-cpi"] }
