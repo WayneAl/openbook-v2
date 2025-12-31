@@ -11,3 +11,4 @@ mod orderbook;
 
 pub mod oracle;
 mod raydium_internal;
+mod switchboard_solana;

@@ -1,10 +1,10 @@
+use super::switchboard_solana::AggregatorAccountData;
 use anchor_lang::prelude::*;
 use anchor_lang::Discriminator;
 use fixed::types::U64F64;
 use static_assertions::const_assert_eq;
 use std::mem::size_of;
 use switchboard_program::FastRoundResultAccountData;
-use switchboard_solana::AggregatorAccountData;
 
 use crate::accounts_zerocopy::*;
 use crate::error::*;

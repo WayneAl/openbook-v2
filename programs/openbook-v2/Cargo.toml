@@ -39,7 +39,7 @@ solana-program = { workspace = true }
 solana-sdk = { workspace = true, optional = true }
 static_assertions = "1.1"
 switchboard-program = ">=0.2.0"
-switchboard-solana = "0.29.99"
+rust_decimal = "1.26.1"
 
 [dev-dependencies]
 async-trait = "0.1.52"
