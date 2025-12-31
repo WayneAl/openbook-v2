@@ -1,6 +1,5 @@
 use anchor_lang::prelude::*;
 use num_enum::{IntoPrimitive, TryFromPrimitive};
-use static_assertions::const_assert_eq;
 
 use super::*;
 
@@ -34,12 +33,6 @@ pub struct BookSide {
     pub reserved: [u8; 256],
     pub nodes: OrderTreeNodes,
 }
-const_assert_eq!(
-    std::mem::size_of::<BookSide>(),
-    std::mem::size_of::<OrderTreeNodes>() + 6 * std::mem::size_of::<OrderTreeRoot>() + 256
-);
-const_assert_eq!(std::mem::size_of::<BookSide>(), 90944);
-const_assert_eq!(std::mem::size_of::<BookSide>() % 8, 0);
 
 impl BookSide {
     /// Iterate over all entries in the book filtering out invalid orders

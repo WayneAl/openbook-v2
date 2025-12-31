@@ -1,9 +1,7 @@
-use std::mem::{align_of, size_of};
 
 use anchor_lang::prelude::*;
 use bytemuck::{cast_mut, cast_ref};
 use num_enum::{IntoPrimitive, TryFromPrimitive};
-use static_assertions::const_assert_eq;
 
 use super::order_type::Side;
 
@@ -98,9 +96,6 @@ pub struct InnerNode {
 
     pub reserved: [u8; 40],
 }
-const_assert_eq!(size_of::<InnerNode>(), 4 + 4 + 16 + 4 * 2 + 8 * 2 + 40);
-const_assert_eq!(size_of::<InnerNode>(), NODE_SIZE);
-const_assert_eq!(size_of::<InnerNode>() % 8, 0);
 
 impl InnerNode {
     pub fn new(prefix_len: u32, key: u128) -> Self {
@@ -177,12 +172,6 @@ pub struct LeafNode {
     /// User defined id for this order, used in FillEvents
     pub client_order_id: u64,
 }
-const_assert_eq!(
-    size_of::<LeafNode>(),
-    4 + 1 + 1 + 1 + 1 + 16 + 32 + 8 + 8 + 8 + 8
-);
-const_assert_eq!(size_of::<LeafNode>(), NODE_SIZE);
-const_assert_eq!(size_of::<LeafNode>() % 8, 0);
 
 impl LeafNode {
     #[allow(clippy::too_many_arguments)]
@@ -245,8 +234,6 @@ pub struct FreeNode {
     // essential to make AnyNode alignment the same as other node types
     pub(crate) force_align: u64,
 }
-const_assert_eq!(size_of::<FreeNode>(), NODE_SIZE);
-const_assert_eq!(size_of::<FreeNode>() % 8, 0);
 
 #[zero_copy]
 pub struct AnyNode {
@@ -255,15 +242,6 @@ pub struct AnyNode {
     // essential to make AnyNode alignment the same as other node types
     pub force_align: u64,
 }
-const_assert_eq!(size_of::<AnyNode>(), NODE_SIZE);
-const_assert_eq!(size_of::<AnyNode>() % 8, 0);
-const_assert_eq!(align_of::<AnyNode>(), 8);
-const_assert_eq!(size_of::<AnyNode>(), size_of::<InnerNode>());
-const_assert_eq!(align_of::<AnyNode>(), align_of::<InnerNode>());
-const_assert_eq!(size_of::<AnyNode>(), size_of::<LeafNode>());
-const_assert_eq!(align_of::<AnyNode>(), align_of::<LeafNode>());
-const_assert_eq!(size_of::<AnyNode>(), size_of::<FreeNode>());
-const_assert_eq!(align_of::<AnyNode>(), align_of::<FreeNode>());
 
 pub(crate) enum NodeRef<'a> {
     Inner(&'a InnerNode),

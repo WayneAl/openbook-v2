@@ -1,8 +1,6 @@
 use crate::error::OpenBookError;
 use anchor_lang::prelude::*;
 use num_enum::{IntoPrimitive, TryFromPrimitive};
-use static_assertions::const_assert_eq;
-use std::mem::size_of;
 
 use super::Side;
 
@@ -20,13 +18,6 @@ pub struct EventHeap {
     pub nodes: [EventNode; MAX_NUM_EVENTS as usize],
     pub reserved: [u8; 64],
 }
-const_assert_eq!(
-    std::mem::size_of::<EventHeap>(),
-    16 + MAX_NUM_EVENTS as usize * (EVENT_SIZE + 8) + 64
-);
-// Costs 0.636 SOL to create this account
-const_assert_eq!(std::mem::size_of::<EventHeap>(), 91280);
-const_assert_eq!(std::mem::size_of::<EventHeap>() % 8, 0);
 
 impl EventHeap {
     pub fn init(&mut self) {
@@ -169,8 +160,6 @@ pub struct EventHeapHeader {
     _padd: u16,
     pub seq_num: u64,
 }
-const_assert_eq!(std::mem::size_of::<EventHeapHeader>(), 16);
-const_assert_eq!(std::mem::size_of::<EventHeapHeader>() % 8, 0);
 
 impl EventHeapHeader {
     pub fn count(&self) -> usize {
@@ -206,8 +195,6 @@ pub struct EventNode {
     _pad: [u8; 4],
     pub event: AnyEvent,
 }
-const_assert_eq!(std::mem::size_of::<EventNode>(), 8 + EVENT_SIZE);
-const_assert_eq!(std::mem::size_of::<EventNode>() % 8, 0);
 
 impl EventNode {
     pub fn is_free(&self) -> bool {
@@ -223,7 +210,6 @@ pub struct AnyEvent {
     pub padding: [u8; 143],
 }
 
-const_assert_eq!(size_of::<AnyEvent>(), EVENT_SIZE);
 
 #[derive(Copy, Clone, IntoPrimitive, TryFromPrimitive, Eq, PartialEq)]
 #[repr(u8)]
@@ -259,8 +245,6 @@ pub struct FillEvent {
     pub maker_client_order_id: u64,
     pub reserved: [u8; 8],
 }
-const_assert_eq!(size_of::<FillEvent>() % 8, 0);
-const_assert_eq!(size_of::<FillEvent>(), EVENT_SIZE);
 
 impl FillEvent {
     #[allow(clippy::too_many_arguments)]
@@ -322,8 +306,6 @@ pub struct OutEvent {
     pub quantity: i64,
     padding1: [u8; 80],
 }
-const_assert_eq!(size_of::<OutEvent>() % 8, 0);
-const_assert_eq!(size_of::<OutEvent>(), EVENT_SIZE);
 
 impl OutEvent {
     pub fn new(

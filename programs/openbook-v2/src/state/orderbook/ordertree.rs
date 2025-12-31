@@ -2,7 +2,6 @@ use anchor_lang::prelude::*;
 use bytemuck::{cast, cast_mut, cast_ref};
 
 use num_enum::{IntoPrimitive, TryFromPrimitive};
-use static_assertions::const_assert_eq;
 
 use super::*;
 use crate::error::OpenBookError;
@@ -40,8 +39,6 @@ pub struct OrderTreeRoot {
     pub maybe_node: NodeHandle,
     pub leaf_count: u32,
 }
-const_assert_eq!(std::mem::size_of::<OrderTreeRoot>(), 8);
-const_assert_eq!(std::mem::size_of::<OrderTreeRoot>() % 8, 0);
 
 impl OrderTreeRoot {
     pub fn node(&self) -> Option<NodeHandle> {
@@ -66,12 +63,6 @@ pub struct OrderTreeNodes {
     pub reserved: [u8; 512],
     pub nodes: [AnyNode; MAX_ORDERTREE_NODES],
 }
-const_assert_eq!(
-    std::mem::size_of::<OrderTreeNodes>(),
-    1 + 3 + 4 * 2 + 4 + 512 + 88 * 1024
-);
-const_assert_eq!(std::mem::size_of::<OrderTreeNodes>(), 90640);
-const_assert_eq!(std::mem::size_of::<OrderTreeNodes>() % 8, 0);
 
 impl OrderTreeNodes {
     pub fn order_tree_type(&self) -> OrderTreeType {

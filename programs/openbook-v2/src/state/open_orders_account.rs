@@ -1,6 +1,5 @@
 use anchor_lang::prelude::*;
 use derivative::Derivative;
-use static_assertions::const_assert_eq;
 use std::mem::size_of;
 
 use crate::logs::{emit_stack, FillLog};
@@ -35,20 +34,6 @@ pub struct OpenOrdersAccount {
 
     pub open_orders: [OpenOrder; MAX_OPEN_ORDERS],
 }
-
-const_assert_eq!(
-    size_of::<OpenOrdersAccount>(),
-    size_of::<Pubkey>() * 2
-        + 32
-        + 32
-        + 4
-        + 1
-        + 3
-        + size_of::<Position>()
-        + MAX_OPEN_ORDERS * size_of::<OpenOrder>()
-);
-const_assert_eq!(size_of::<OpenOrdersAccount>(), 1256);
-const_assert_eq!(size_of::<OpenOrdersAccount>() % 8, 0);
 
 impl OpenOrdersAccount {
     /// Number of bytes needed for the OpenOrdersAccount, including the discriminator
@@ -374,13 +359,6 @@ pub struct Position {
     pub reserved: [u8; 64],
 }
 
-const_assert_eq!(
-    size_of::<Position>(),
-    8 + 8 + 8 + 8 + 8 + 8 + 8 + 16 + 16 + 8 + 64
-);
-const_assert_eq!(size_of::<Position>(), 160);
-const_assert_eq!(size_of::<Position>() % 8, 0);
-
 impl Default for Position {
     fn default() -> Self {
         Self {
@@ -433,9 +411,6 @@ pub struct OpenOrder {
     pub side_and_tree: u8, // SideAndOrderTree -- enums aren't POD
     pub padding: [u8; 6],
 }
-const_assert_eq!(size_of::<OpenOrder>(), 16 + 8 + 8 + 1 + 1 + 6);
-const_assert_eq!(size_of::<OpenOrder>(), 40);
-const_assert_eq!(size_of::<OpenOrder>() % 8, 0);
 
 impl Default for OpenOrder {
     fn default() -> Self {

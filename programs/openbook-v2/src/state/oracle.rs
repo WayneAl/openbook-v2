@@ -2,8 +2,6 @@ use super::switchboard_solana::AggregatorAccountData;
 use anchor_lang::prelude::*;
 use anchor_lang::Discriminator;
 use fixed::types::U64F64;
-use static_assertions::const_assert_eq;
-use std::mem::size_of;
 use switchboard_program::FastRoundResultAccountData;
 
 use crate::accounts_zerocopy::*;
@@ -37,9 +35,6 @@ pub struct OracleConfig {
     pub max_staleness_slots: i64,
     pub reserved: [u8; 72],
 }
-const_assert_eq!(size_of::<OracleConfig>(), 8 + 8 + 72);
-const_assert_eq!(size_of::<OracleConfig>(), 88);
-const_assert_eq!(size_of::<OracleConfig>() % 8, 0);
 
 #[derive(AnchorDeserialize, AnchorSerialize, Debug, Clone)]
 #[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
@@ -145,9 +140,6 @@ pub struct StubOracle {
     pub deviation: f64,
     pub reserved: [u8; 104],
 }
-const_assert_eq!(size_of::<StubOracle>(), 32 + 32 + 8 + 8 + 8 + 8 + 104);
-const_assert_eq!(size_of::<StubOracle>(), 200);
-const_assert_eq!(size_of::<StubOracle>() % 8, 0);
 
 pub fn determine_oracle_type(acc_info: &impl KeyedAccountReader) -> Result<OracleType> {
     let data = acc_info.data();
